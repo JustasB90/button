@@ -2,6 +2,7 @@
 
 Button
 ######
+This is a week 3 assignment for the Classpert Embedded Systems Course.
 
 Overview
 ********
