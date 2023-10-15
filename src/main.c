@@ -9,11 +9,11 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
-#include <zephyr/sys/printk.h>
+#include <zephyr/sys/printk.h>button_press_time
 #include <inttypes.h>
 
 #define SLEEP_TIME_MS	1
-
+#define BUTTON_DEBOUNCE_TIME_MS 100
 /*
  * Get button configuration from the devicetree sw0 alias. This is mandatory.
  */
@@ -32,10 +32,19 @@ static struct gpio_callback button_cb_data;
 static struct gpio_dt_spec led = GPIO_DT_SPEC_GET_OR(DT_ALIAS(led0), gpios,
 						     {0});
 
+uint32_t lastPressTime;
 void button_pressed(const struct device *dev, struct gpio_callback *cb,
 		    uint32_t pins)
 {
+	uint32_t newPressTime = k_uptime_get_32();
+	//debounce
+	if (k_uptime_get_32() - lastPressTime < BUTTON_DEBOUNCE_TIME_MS ) 
+		{
+			return;
+		}
+	gpio_pin_toggle_dt(&led);
 	printk("Button pressed at %" PRIu32 "\n", k_cycle_get_32());
+	lastPressTime = newPressTime;
 }
 
 int main(void)
@@ -89,9 +98,9 @@ int main(void)
 			/* If we have an LED, match its state to the button's. */
 			int val = gpio_pin_get_dt(&button);
 
-			if (val >= 0) {
-				gpio_pin_set_dt(&led, val);
-			}
+			//if (val >= 0) {
+			//	gpio_pin_set_dt(&led, val);
+			//}
 			k_msleep(SLEEP_TIME_MS);
 		}
 	}
