@@ -12,6 +12,7 @@ This is a modified sample from the SDK which demonstrated how to:
 3. Toggle an LED.
 
 Board: nRF52840DK
+
 SDK: nRF Connect SDK 2.4.2
 
 Questions
@@ -24,4 +25,4 @@ OUT . Datasheet pg 152
 IN . Datasheet pg 153
 
 3. Can you read the register directly and see the button change in a debugger or by printing out thes value of the memory at the register’s address?
-I can toggle LED by changing PIN13 in debugger. So far it looks like a standard debugger.
+I can toggle the LED by changing PIN13 in OUT register in the debugger. So far it looks like a standard debugger. 
